@@ -13,8 +13,11 @@
     "url": "https://github.com/razetdinov/dollar-config"
   },
   "files": [
-    "*.js",
-    "browser"
+    "bin",
+    "browser",
+    "ajv.js",
+    "index.js",
+    "load.js"
   ],
   "directories": {
     "bin": "bin"
