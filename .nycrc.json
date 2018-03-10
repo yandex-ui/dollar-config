@@ -1,0 +1,17 @@
+{
+    "reporter": [
+        "lcov",
+        "text-summary"
+    ],
+    "statements": 100,
+    "branches": 100,
+    "functions": 100,
+    "lines": 100,
+    "all": true,
+    "include": [
+        "*.js"
+    ],
+    "exclude": [
+        "node_modules/**"
+    ]
+}

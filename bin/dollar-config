@@ -1,0 +1,16 @@
+#!/usr/bin/env node
+'use strict';
+
+const assert = require('assert');
+const dir = process.version < 'v5' ? '../node4/' : '../';
+const loadConfig = require(dir + 'load');
+const program = require('commander');
+
+program
+    .command('load <filename>')
+    .action((filename, options) => {
+        assert(filename, '<filename> is required');
+        console.log(JSON.stringify(loadConfig(filename), null, '  '));
+    });
+
+program.parse(process.argv);
