@@ -14,7 +14,7 @@
   },
   "files": [
     "bin",
-    "browser",
+    "dist",
     "ajv.js",
     "index.js",
     "load.js"
@@ -22,7 +22,7 @@
   "directories": {
     "bin": "bin"
   },
-  "browser": "browser/index.js",
+  "browser": "dist/index.js",
   "dependencies": {
     "ajv": "6.2.1",
     "commander": "2.13.0",
@@ -47,7 +47,7 @@
     "coverage": "nyc mocha -R dot",
     "lint": "eslint --ignore-path .gitignore .",
     "precommit": "yarn lint",
-    "prepublish": "babel --presets=es2015 index.js -d browser",
+    "prepublish": "babel --presets=es2015 index.js -d dist",
     "prepush": "nyc --check-coverage mocha -R dot",
     "test": "mocha"
   }

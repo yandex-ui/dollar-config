@@ -1,4 +1,4 @@
 /.nyc_output
-/browser
 /coverage
+/dist
 /node_modules
