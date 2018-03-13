@@ -229,7 +229,7 @@ validate({ foo: { $param: 'bar' } });
 > true
 ```
 
-All `$default`, `$guard` and `$switch` leaf values are validated against original schema:
+The leaf values of $-keywords must match original schema:
 ```
 validate({ foo: { $param: 'bar', $default: 1 } });
 > true

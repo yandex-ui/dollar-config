@@ -13,6 +13,7 @@ describe('ajvDynamic', () => {
     it('validates against extended schema', () => {
         expect(validate({ $param: 'foo' })).to.be.true;
         expect(validate({ $param: 1 })).to.be.false;
+        expect(validate({ $template: 'foo' })).to.be.false;
     });
 
     it('supports circular self-references', () => {

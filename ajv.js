@@ -37,7 +37,12 @@ function createSchema(schema, $ref) {
                 required: [ '$template' ],
                 additionalProperties: false,
                 properties: {
-                    $template: { type: 'string' }
+                    $template: {
+                        allOf: [
+                            { type: 'string' },
+                            { $ref }
+                        ]
+                    }
                 }
             },
             {
