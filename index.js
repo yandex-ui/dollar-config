@@ -53,8 +53,8 @@ class Config {
                     return value.map((value) => this._resolve(value, params, true));
                 }
             } else {
-                if (value.$ref) {
-                    const result = get(params, value.$ref);
+                if (value.$param) {
+                    const result = get(params, value.$param);
                     return result === undefined ? this._resolve(value.$default, params) : result;
                 }
                 if (value.$template) {

@@ -11,13 +11,13 @@ describe('ajvDynamic', () => {
     });
 
     it('validates against extended schema', () => {
-        expect(validate({ $ref: 'foo' })).to.be.true;
-        expect(validate({ $ref: 1 })).to.be.false;
+        expect(validate({ $param: 'foo' })).to.be.true;
+        expect(validate({ $param: 1 })).to.be.false;
     });
 
     it('supports circular self-references', () => {
-        expect(validate({ $ref: 'foo', $default: { $ref: 'bar' } })).to.be.true;
-        expect(validate({ $ref: 'foo', $default: { $ref: 1 } })).to.be.false;
+        expect(validate({ $param: 'foo', $default: { $param: 'bar' } })).to.be.true;
+        expect(validate({ $param: 'foo', $default: { $param: 1 } })).to.be.false;
     });
 
     it('caches created schemas', () => {

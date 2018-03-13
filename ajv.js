@@ -25,11 +25,11 @@ function createSchema(schema, $ref) {
             schema,
             {
                 type: 'object',
-                required: [ '$ref' ],
+                required: [ '$param' ],
                 additionalProperties: false,
                 properties: {
                     $default: { $ref },
-                    $ref: { type: 'string' }
+                    $param: { type: 'string' }
                 }
             },
             {

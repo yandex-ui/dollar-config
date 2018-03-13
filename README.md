@@ -82,7 +82,7 @@ Fallbacks to an optional `$default` if param is `undefined`.
 ```
 {
   "foo": {
-    "$ref": "bar",
+    "$param": "bar",
     "$default: 0
   }
 }
@@ -164,7 +164,7 @@ Deep properties are accessible with dot-notation:
 {
   "foo": {
     "bar": {
-      "$ref": "baz.qux"
+      "$param": "baz.qux"
     }
   }
 }
@@ -184,7 +184,7 @@ You can mix and match $-keywords to get the desired effect:
       "baz": {
         "$guard": {
           "qux": {
-            "$ref": "xyz"
+            "$param": "xyz"
           }
         }
       }
@@ -225,16 +225,16 @@ The plugin introduces a custom `dynamic` keyword which accepts any valid JSON sc
 validate({ foo: 1 });
 > true
 
-validate({ foo: { $ref: 'bar' } });
+validate({ foo: { $param: 'bar' } });
 > true
 ```
 
 All `$default`, `$guard` and `$switch` leaf values are validated against original schema:
 ```
-validate({ foo: { $ref: 'bar', $default: 1 } });
+validate({ foo: { $param: 'bar', $default: 1 } });
 > true
 
-validate({ foo: { $ref: 'bar', $default: '1' } });
+validate({ foo: { $param: 'bar', $default: '1' } });
 > false (expected number, got string)
 
 validate({ foo: { $guard: { bar: '1' } });

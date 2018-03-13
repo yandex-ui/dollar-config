@@ -92,11 +92,11 @@ describe('DollarConfig', () => {
             });
         });
 
-        describe('for properties with $ref', () => {
+        describe('for properties with $param', () => {
             it('returns referenced param', () => {
                 const config = new Config({
                     foo: {
-                        $ref: 'bar'
+                        $param: 'bar'
                     }
                 });
                 expect(config.get('foo', { bar: 'baz' })).to.equal('baz');
@@ -106,7 +106,7 @@ describe('DollarConfig', () => {
                 const config = new Config({
                     foo: [
                         {
-                            $ref: 'bar'
+                            $param: 'bar'
                         }
                     ]
                 });
@@ -117,7 +117,7 @@ describe('DollarConfig', () => {
                 const config = new Config({
                     foo: {
                         $default: 'oops',
-                        $ref: 'bar'
+                        $param: 'bar'
                     }
                 });
                 expect(config.get('foo', {})).to.equal('oops');
@@ -127,9 +127,9 @@ describe('DollarConfig', () => {
                 const config = new Config({
                     foo: {
                         $default: {
-                            $ref: 'baz'
+                            $param: 'baz'
                         },
-                        $ref: 'bar'
+                        $param: 'bar'
                     }
                 });
                 expect(config.get('foo', { baz: 'qux' })).to.equal('qux');
@@ -167,7 +167,7 @@ describe('DollarConfig', () => {
                             $guard: {
                                 abc: 'bar',
                                 def: {
-                                    $ref: 'ghi'
+                                    $param: 'ghi'
                                 }
                             }
                         }
@@ -195,7 +195,7 @@ describe('DollarConfig', () => {
                             $guard: {
                                 abc: 'bar',
                                 $default: {
-                                    $ref: 'ghi'
+                                    $param: 'ghi'
                                 }
                             }
                         }
@@ -227,7 +227,7 @@ describe('DollarConfig', () => {
                             abc: {
                                 def: 'bar',
                                 ghi: {
-                                    $ref: 'jkl'
+                                    $param: 'jkl'
                                 }
                             }
                         }
@@ -257,7 +257,7 @@ describe('DollarConfig', () => {
                             abc: {
                                 def: 'bar',
                                 $default: {
-                                    $ref: 'jkl'
+                                    $param: 'jkl'
                                 }
                             }
                         }
@@ -271,7 +271,7 @@ describe('DollarConfig', () => {
             it('recursively resolves objects', () => {
                 const config = new Config({
                     foo: {
-                        $ref: 'abc'
+                        $param: 'abc'
                     }
                 });
                 expect(config.get([], { abc: 'bar' })).to.eql({ foo: 'bar' });
@@ -281,7 +281,7 @@ describe('DollarConfig', () => {
                 const config = new Config({
                     foo: [
                         {
-                            $ref: 'abc'
+                            $param: 'abc'
                         }
                     ]
                 });
