@@ -13,20 +13,13 @@
     "url": "https://github.com/razetdinov/dollar-config"
   },
   "files": [
-    "bin",
     "dist",
     "ajv.js",
-    "index.js",
-    "load.js"
+    "index.js"
   ],
-  "directories": {
-    "bin": "bin"
-  },
   "browser": "dist/index.js",
   "dependencies": {
     "ajv": "6.2.1",
-    "commander": "2.13.0",
-    "deep-extend": "0.5.0",
     "js-yaml": "3.11.0",
     "uuid": "3.2.1"
   },

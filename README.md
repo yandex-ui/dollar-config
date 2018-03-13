@@ -19,7 +19,6 @@ Dollar config lets you keep dynamic settings in a declarative way and query them
          * [Nested settings/params](#nested-settingsparams)
          * [Nested $-keywords](#nested--keywords)
       * [Validation](#validation)
-      * [Extending configs](#extending-configs)
 
 <!-- Added by: azat, at: 2018-03-11T01:08+0300 -->
 
@@ -240,42 +239,4 @@ validate({ foo: { $ref: 'bar', $default: '1' } });
 
 validate({ foo: { $guard: { bar: '1' } });
 > false (expected number, got string)
-```
-
-## Extending configs
-`$extends` is different from the before-mentioned keywords as it's of no use at runtime.
-
-You can use `$extends` keyword and a special `dollar-config/load` helper to inherit configs:
-
-`config.json`:
-```
-{
-  "foo": 1
-}
-```
-
-`config.production.json`:
-```
-{
-  "$extends": "config.json",
-  "bar": 2
-}
-```
-```
-const loadConfig = require('dollar-config/load');
-loadConfig('config.production.json');
-> { foo: 1, bar: 2 }
-```
-
-Using an array enables multiple inheritance:
-```
-{
-  "$extends": [ "config.json", "custom.json" ],
-  "bar": 2
-}
-```
-
-One can use a special `dollar-config load` cli command to validate such configs against a JSON schema:
-```
-ajv validate -d <(dollar-config load config.json) -s schema.json -c dollar-config/ajv
 ```
