@@ -32,7 +32,8 @@ class Config {
             if (isLast) {
                 break;
             }
-            value = getProperty(value, path[index++]);
+            const result = value[path[index++]];
+            value = result === undefined ? value.$default : result;
         }
 
         return value;
@@ -54,20 +55,23 @@ class Config {
                 }
             } else {
                 if (value.$param) {
-                    const result = get(params, value.$param);
-                    return result === undefined ? this._resolve(value.$default, params) : result;
+                    if (typeof value.$param === 'string') {
+                        return get(params, value.$param);
+                    }
+                    const result = get(params, value.$param[0]);
+                    return result === undefined ? this._resolve(value.$param[1], params) : result;
                 }
                 if (value.$template) {
                     return value.$template.replace(/\$\{([^}]+)\}/g, (_, path) => get(params, path));
                 }
                 if (value.$guard) {
-                    const path = Object.keys(value.$guard).find((path) => get(params, path));
-                    return this._resolve(value.$guard[path || '$default'], params);
+                    const item = find(value.$guard, (item) => item[0] === '$default' || get(params, item[0]));
+                    return item && this._resolve(item[1], params);
                 }
                 if (value.$switch) {
-                    const key = get(params, value.$switch);
-                    const values = value[value.$switch];
-                    return this._resolve(getProperty(values, key), params);
+                    const key = get(params, value.$switch[0]);
+                    const item = find(value.$switch[1], (item) => item[0] === key || item[0] === '$default');
+                    return item && this._resolve(item[1], params);
                 }
                 if (deep) {
                     return Object.keys(value).reduce((result, key) => {
@@ -82,6 +86,19 @@ class Config {
     }
 }
 
+// shim for IE
+function find(array, callback) {
+    let result;
+    array.some((item) => {
+        if (callback(item)) {
+            result = item;
+            return true;
+        }
+        return false;
+    });
+    return result;
+}
+
 function get(object, path) {
     path = path.split('.');
     const length = path.length;
@@ -92,10 +109,6 @@ function get(object, path) {
     }
 
     return object;
-}
-
-function getProperty(object, key) {
-    return object[object[key] === undefined ? '$default' : key];
 }
 
 module.exports = Config;

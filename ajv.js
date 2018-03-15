@@ -1,11 +1,12 @@
 'use strict';
 
 const uuidv5 = require('uuid/v5');
+const DEFAULT_SCHEMA_ID = 'http://json-schema.org/schema';
 
 function dynamic(ajv) {
     ajv.addKeyword('dynamic', {
         macro,
-        metaSchema: ajv.getSchema('http://json-schema.org/schema').schema
+        metaSchema: ajv.getSchema(DEFAULT_SCHEMA_ID).schema
     });
     return ajv;
 }
@@ -20,55 +21,49 @@ function macro(schema, parentSchema, context) {
 }
 
 function createSchema(schema, $ref) {
+    const stringAndRef = {
+        type: 'array',
+        items: [ { type: 'string' }, { $ref } ]
+    };
+    const anyAndRef = {
+        type: 'array',
+        items: [ {}, { $ref } ]
+    };
+
     return {
         oneOf: [
             schema,
             {
                 type: 'object',
-                required: [ '$param' ],
                 additionalProperties: false,
                 properties: {
-                    $default: { $ref },
-                    $param: { type: 'string' }
-                }
-            },
-            {
-                type: 'object',
-                required: [ '$template' ],
-                additionalProperties: false,
-                properties: {
-                    $template: {
-                        allOf: [
+                    $param: {
+                        oneOf: [
                             { type: 'string' },
-                            { $ref }
+                            stringAndRef
+                        ]
+                    },
+                    $template: {
+                        allOf: stringAndRef.items
+                    },
+                    $guard: {
+                        type: 'array',
+                        items: stringAndRef
+                    },
+                    $switch: {
+                        type: 'array',
+                        items: [
+                            { type: 'string' },
+                            { type: 'array', items: anyAndRef }
                         ]
                     }
-                }
-            },
-            {
-                type: 'object',
-                required: [ '$guard' ],
-                additionalProperties: false,
-                properties: {
-                    $guard: {
-                        type: 'object',
-                        minProperties: 1,
-                        additionalProperties: { $ref }
-                    }
-                }
-            },
-            {
-                type: 'object',
-                required: [ '$switch' ],
-                minProperties: 2,
-                maxProperties: 2,
-                properties: {
-                    $switch: { type: 'string' }
                 },
-                additionalProperties: {
-                    type: 'object',
-                    additionalProperties: { $ref }
-                }
+                oneOf: [
+                    { required: [ '$param' ] },
+                    { required: [ '$template' ] },
+                    { required: [ '$guard' ] },
+                    { required: [ '$switch' ] }
+                ]
             }
         ]
     };

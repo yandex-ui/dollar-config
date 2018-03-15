@@ -77,56 +77,63 @@ config.get('bar');
 
 ### Reference to a param
 Looks up a param and returns its value.
-
-Fallbacks to an optional `$default` if param is `undefined`.
 ```
 {
   "foo": {
-    "$param": "bar",
-    "$default: 0
+    "$param": "bar"
   }
 }
 ```
 ```
 config.get('foo', { bar: 1 });
 > 1
+```
 
+Use an array to provide a default value:
+```
+{
+  "foo": {
+    "$param": [ "bar", 0 ]
+  }
+}
+```
+```
 config.get('foo', { baz: 1 });
 > 0
 ```
 
 ### Template setting
-Replaces `${placeholders}` with param values.
+Replaces `${paramName}` with param value.
 ```
 {
-  "foo": {
-    "$template": "${bar}, ${baz}"
+  "greeting": {
+    "$template": "Hello, ${name}!"
   }
 }
 ```
 ```
-config.get('foo', { bar: 'obladi', baz: 'oblada' });
-> obladi, oblada
+config.get('greeting', { name: 'John' });
+> Hello, John!
 ```
 
 ### Guarded setting
 Picks the first truthy param and returns correspondent setting.
 
-Fallbacks to an optional `$default` if none of the params is truthy.
+Falls back to an optional `$default` if none of the params is truthy.
 ```
 {
   "foo": {
-    "$guard": {
-      "foo": "no luck",
-      "bar": "close, but no cigar",
-      "baz": "you are the champion",
-      "$default": "oops"
-    }
+    "$guard": [
+      [ "bar", "no luck" ],
+      [ "baz", "close, but no cigar" ],
+      [ "qux", "you are the champion" ],
+      [ "$default", "oops" ]
+    ]
   }
 }
 ```
 ```
-config.get('foo', { foo: false, bar: '', baz: 1 });
+config.get('foo', { bar: false, baz: '', qux: 1 });
 > you are the champion
 
 config.get('foo', {})
@@ -136,30 +143,32 @@ config.get('foo', {})
 ### Switched setting
 Matches param value to a list of cases and picks correspondent setting.
 
-Fallbacks to an optional `$default` if no match is found.
+Falls back to an optional `$default` if no match is found.
 ```
 {
-  "foo": {
-    "$switch": "bar",
-    "bar": {
-      "morning": "breakfast",
-      "midday": "launch",
-      "evening": "dinner",
-      "$default": "fridge"
+  "meal": {
+    "$switch": [
+      "dayOfTime",
+      [
+        [ "morning": "breakfast" ],
+        [ "midday": "launch" ],
+        [ "evening": "dinner" ],
+        [ "$default": "fridge" ]
+      ]
     }
   }
 }
 ```
 ```
-config.get('foo', { bar: 'midday' });
+config.get('meal', { dayOfTime: 'midday' });
 > launch
 
-config.get('foo', { bar: 'night' });
+config.get('meal', { dayOfTime: 'night' });
 > fridge
 ```
 
 ### Nested settings/params
-Deep properties are accessible with dot-notation:
+Deep properties are accessible with dot-notation (both in settings and params):
 ```
 {
   "foo": {
@@ -179,15 +188,18 @@ You can mix and match $-keywords to get the desired effect:
 ```
 {
   "foo": {
-    "$switch": "bar",
-    "bar": {
-      "baz": {
-        "$guard": {
-          "qux": {
-            "$param": "xyz"
+    "$switch": [
+      "bar",
+      [
+        [
+          "baz",
+          {
+            "$guard": [
+              [ "qux", { "$param": "xyz" } ]
+            ]
           }
-        }
-      }
+        ]
+      ]
     }
   }
 }
@@ -229,14 +241,20 @@ validate({ foo: { $param: 'bar' } });
 > true
 ```
 
-The leaf values of $-keywords must match original schema:
+The plugin checks that leaf values of $-keywords match original schema:
 ```
-validate({ foo: { $param: 'bar', $default: 1 } });
+validate({ foo: { $param: [ 'bar', 1 ] } });
 > true
 
-validate({ foo: { $param: 'bar', $default: '1' } });
+validate({ foo: { $param: [ 'bar', '1' ] } });
 > false (expected number, got string)
 
-validate({ foo: { $guard: { bar: '1' } });
+validate({ foo: { $guard: [ [ 'bar': '1' ] ] } });
 > false (expected number, got string)
+```
+
+Using `$template` implies that the original schema is string:
+```
+validate({ foo: { $template: ${bar}/${baz}' } });
+> false (expected original schema to be string, got number)
 ```

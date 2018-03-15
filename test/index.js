@@ -102,6 +102,15 @@ describe('DollarConfig', () => {
                 expect(config.get('foo', { bar: 'baz' })).to.equal('baz');
             });
 
+            it('returns reference param with default fallback', () => {
+                const config = new Config({
+                    foo: {
+                        $param: [ 'bar', 'oops' ]
+                    }
+                });
+                expect(config.get('foo', { bar: 'baz' })).to.equal('baz');
+            });
+
             it('returns array item with referenced param', () => {
                 const config = new Config({
                     foo: [
@@ -116,8 +125,7 @@ describe('DollarConfig', () => {
             it('returns default value', () => {
                 const config = new Config({
                     foo: {
-                        $default: 'oops',
-                        $param: 'bar'
+                        $param: [ 'bar', 'oops' ]
                     }
                 });
                 expect(config.get('foo', {})).to.equal('oops');
@@ -126,10 +134,7 @@ describe('DollarConfig', () => {
             it('returns resolved default value', () => {
                 const config = new Config({
                     foo: {
-                        $default: {
-                            $param: 'baz'
-                        },
-                        $param: 'bar'
+                        $param: [ 'bar', { $param: 'baz' } ]
                     }
                 });
                 expect(config.get('foo', { baz: 'qux' })).to.equal('qux');
@@ -152,10 +157,10 @@ describe('DollarConfig', () => {
                 it('returns correspondent value', () => {
                     const config = new Config({
                         foo: {
-                            $guard: {
-                                abc: 'bar',
-                                def: 'baz'
-                            }
+                            $guard: [
+                                [ 'abc', 'bar' ],
+                                [ 'def', 'baz' ]
+                            ]
                         }
                     });
                     expect(config.get('foo', { def: 1 })).to.equal('baz');
@@ -164,12 +169,10 @@ describe('DollarConfig', () => {
                 it('returns resolved correspondent value', () => {
                     const config = new Config({
                         foo: {
-                            $guard: {
-                                abc: 'bar',
-                                def: {
-                                    $param: 'ghi'
-                                }
-                            }
+                            $guard: [
+                                [ 'abc', 'bar' ],
+                                [ 'def', { $param: 'ghi' } ]
+                            ]
                         }
                     });
                     expect(config.get('foo', { def: 1, ghi: 'baz' })).to.equal('baz');
@@ -180,10 +183,10 @@ describe('DollarConfig', () => {
                 it('returns default value', () => {
                     const config = new Config({
                         foo: {
-                            $guard: {
-                                abc: 'bar',
-                                $default: 'oops'
-                            }
+                            $guard: [
+                                [ 'abc', 'bar' ],
+                                [ '$default', 'oops' ]
+                            ]
                         }
                     });
                     expect(config.get('foo', {})).to.equal('oops');
@@ -192,12 +195,10 @@ describe('DollarConfig', () => {
                 it('returns resolved default value', () => {
                     const config = new Config({
                         foo: {
-                            $guard: {
-                                abc: 'bar',
-                                $default: {
-                                    $param: 'ghi'
-                                }
-                            }
+                            $guard: [
+                                [ 'abc', 'bar' ],
+                                [ '$default', { $param: 'ghi' } ]
+                            ]
                         }
                     });
                     expect(config.get('foo', { def: 1, ghi: 'baz' })).to.equal('baz');
@@ -210,11 +211,13 @@ describe('DollarConfig', () => {
                 it('returns correspondent value', () => {
                     const config = new Config({
                         foo: {
-                            $switch: 'abc',
-                            abc: {
-                                def: 'bar',
-                                ghi: 'baz'
-                            }
+                            $switch: [
+                                'abc',
+                                [
+                                    [ 'def', 'bar' ],
+                                    [ 'ghi', 'baz' ]
+                                ]
+                            ]
                         }
                     });
                     expect(config.get('foo', { abc: 'ghi' })).to.equal('baz');
@@ -223,13 +226,13 @@ describe('DollarConfig', () => {
                 it('returns resolved correspondent value', () => {
                     const config = new Config({
                         foo: {
-                            $switch: 'abc',
-                            abc: {
-                                def: 'bar',
-                                ghi: {
-                                    $param: 'jkl'
-                                }
-                            }
+                            $switch: [
+                                'abc',
+                                [
+                                    [ 'def', 'bar' ],
+                                    [ 'ghi', { $param: 'jkl' } ]
+                                ]
+                            ]
                         }
                     });
                     expect(config.get('foo', { abc: 'ghi', jkl: 'baz' })).to.equal('baz');
@@ -240,11 +243,13 @@ describe('DollarConfig', () => {
                 it('returns default value', () => {
                     const config = new Config({
                         foo: {
-                            $switch: 'abc',
-                            abc: {
-                                def: 'bar',
-                                $default: 'oops'
-                            }
+                            $switch: [
+                                'abc',
+                                [
+                                    [ 'def', 'bar' ],
+                                    [ '$default', 'oops' ]
+                                ]
+                            ]
                         }
                     });
                     expect(config.get('foo', { abc: 'ghi' })).to.equal('oops');
@@ -253,13 +258,13 @@ describe('DollarConfig', () => {
                 it('returns resolved default value', () => {
                     const config = new Config({
                         foo: {
-                            $switch: 'abc',
-                            abc: {
-                                def: 'bar',
-                                $default: {
-                                    $param: 'jkl'
-                                }
-                            }
+                            $switch: [
+                                'abc',
+                                [
+                                    [ 'def', 'bar' ],
+                                    [ '$default', { $param: 'jkl' } ]
+                                ]
+                            ]
                         }
                     });
                     expect(config.get('foo', { abc: 'ghi', jkl: 'baz' })).to.equal('baz');
