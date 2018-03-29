@@ -10,6 +10,20 @@ describe('ajvDynamic', () => {
         expect(validate('1')).to.be.false;
     });
 
+    describe('for original schema', () => {
+        it('passes empty schema', () => {
+            const validate = ajv.compile({ dynamic: {} });
+            expect(validate(1)).to.be.true;
+        });
+
+        it('fails schemas with $-keywords', () => {
+            const validate = ajv.compile({
+                dynamic: { type: 'object', properties: { $param: {} } }
+            });
+            expect(validate({ $param: null })).to.be.false;
+        });
+    });
+
     describe('for $param', () => {
         it('passes reference to param', () => {
             expect(validate({ $param: 'foo' })).to.be.true;

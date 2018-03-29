@@ -29,41 +29,45 @@ function createSchema(schema, $ref) {
         type: 'array',
         items: [ {}, { $ref } ]
     };
+    const properties = {
+        $param: {
+            oneOf: [
+                { type: 'string' },
+                stringAndRef
+            ]
+        },
+        $template: {
+            allOf: stringAndRef.items
+        },
+        $guard: {
+            type: 'array',
+            items: stringAndRef
+        },
+        $switch: {
+            type: 'array',
+            items: [
+                { type: 'string' },
+                { type: 'array', items: anyAndRef }
+            ]
+        }
+    };
+    const requiredKeys = Object.keys(properties).map((key) => {
+        return { required: [ key ] };
+    });
 
     return {
         oneOf: [
-            schema,
+            {
+                allOf: [
+                    schema,
+                    { not: { type: 'object', anyOf: requiredKeys } }
+                ]
+            },
             {
                 type: 'object',
                 additionalProperties: false,
-                properties: {
-                    $param: {
-                        oneOf: [
-                            { type: 'string' },
-                            stringAndRef
-                        ]
-                    },
-                    $template: {
-                        allOf: stringAndRef.items
-                    },
-                    $guard: {
-                        type: 'array',
-                        items: stringAndRef
-                    },
-                    $switch: {
-                        type: 'array',
-                        items: [
-                            { type: 'string' },
-                            { type: 'array', items: anyAndRef }
-                        ]
-                    }
-                },
-                oneOf: [
-                    { required: [ '$param' ] },
-                    { required: [ '$template' ] },
-                    { required: [ '$guard' ] },
-                    { required: [ '$switch' ] }
-                ]
+                properties,
+                oneOf: requiredKeys
             }
         ]
     };
