@@ -2,7 +2,7 @@
 
 class Config {
     /**
-     * @param {Object} data - Config data.
+     * @param {object} data - Config data.
      */
     constructor(data) {
         this._data = data;
@@ -11,9 +11,9 @@ class Config {
     /**
      * Computes config value.
      *
-     * @param {Array|string} path - The path of the property to get.
-     * @param {Object} [params] - Dynamic params.
-     * @returns {*} - Config value.
+     * @param {string|string[]} path - The path of the property to get.
+     * @param {object} [params] - Dynamic params.
+     * @returns {*} Config value.
      */
     get(path, params) {
         if (typeof path === 'string') {
@@ -42,10 +42,10 @@ class Config {
     /**
      * Resolves config value.
      *
-     * @param {*} value - Dot-delimited path to config value.
-     * @param {Object} params - Dynamic params.
+     * @param {*} value - Config value.
+     * @param {object} params - Dynamic params.
      * @param {boolean} [deep=false] - Recursively resolve nested properties.
-     * @returns {*} - Config value.
+     * @returns {*} Config value.
      */
     _resolve(value, params, deep) {
         if (typeof value === 'object' && value !== null) {
@@ -69,8 +69,8 @@ class Config {
                     return item && this._resolve(item[1], params);
                 }
                 if (value.$switch) {
-                    const key = get(params, value.$switch[0]);
-                    const item = find(value.$switch[1], (item) => item[0] === key || item[0] === '$default');
+                    const test = get(params, value.$switch[0]);
+                    const item = find(value.$switch[1], (item) => item[0] === test || item[0] === '$default');
                     return item && this._resolve(item[1], params);
                 }
                 if (deep) {
