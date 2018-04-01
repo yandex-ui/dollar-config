@@ -14,8 +14,7 @@
   },
   "files": [
     "dist",
-    "ajv.js",
-    "index.js"
+    "*.js"
   ],
   "browser": "dist/index.js",
   "dependencies": {
