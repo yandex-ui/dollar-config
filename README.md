@@ -18,6 +18,7 @@ Dollar config lets you keep dynamic settings in a declarative way and query them
          * [Switched setting](#switched-setting)
          * [Nested settings/params](#nested-settingsparams)
          * [Nested $-keywords](#nested--keywords)
+      * [Express middleware](#express-middleware)
       * [Validation](#validation)
       * [Building](#building)
 
@@ -40,13 +41,6 @@ const config = new DollarConfig(require('config.json'));
 ## Usage
 ```js
 config.get('path.to.setting', runtimeParams);
-```
-A common pattern for [express](http://expressjs.com/) applications:
-```js
-function expressMiddleware(req, res, next) {
-    const value = config.get('path.to.setting', req);
-    ...
-}
 ```
 
 ## Examples
@@ -212,6 +206,34 @@ You can mix and match $-keywords to get the desired effect:
 ```js
 config.get('foo', { bar: 'baz', qux: true, xyz: 1 });
 > 1
+```
+
+## Express middleware
+Dollar config [express](http://expressjs.com/) middleware creates `req.config` which always passes `req` as `runtimParams` to `config.get`, so you don't have to do it manually:
+```js
+{
+  "foo": {
+    "$param": "query.bar"
+  }
+}
+```
+```js
+const dollarConfigMiddleware = require('dollar-config/middleware');
+
+app.use(dollarConfigMiddleware(require('config.json'));
+
+app.use((req, res, next) => {
+    req.config.get('foo');
+});
+```
+
+The middleware accepts dollar config instances as well:
+```js
+const dollarConfigMiddleware = require('dollar-config/middleware');
+
+const config = new DollarConfig(require('config.json'));
+
+app.use(dollarConfigMiddleware(config));
 ```
 
 ## Validation
