@@ -8,9 +8,7 @@ function middlewareFactory(config) {
     }
 
     return (req, res, next) => {
-        req.config = {
-            get: (path) => config.get(path, req)
-        };
+        req.config = config.bind(req);
         next();
     };
 }

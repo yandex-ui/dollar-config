@@ -328,4 +328,34 @@ describe('DollarConfig', () => {
             });
         });
     });
+
+    describe('bind', () => {
+        it('proxies static object properties', () => {
+            const config = new Config({
+                foo: 1
+            });
+            expect(config.bind({}).foo).to.equal(1);
+        });
+
+        it('binds dynamic object properties', () => {
+            const config = new Config({
+                foo: { $param: 'bar' }
+            });
+            expect(config.bind({ bar: 1 }).foo).to.equal(1);
+        });
+
+        it('proxies static array items', () => {
+            const config = new Config({
+                foo: [ 1 ]
+            });
+            expect(config.bind({}).foo[0]).to.equal(1);
+        });
+
+        it('binds dynamic array items', () => {
+            const config = new Config({
+                foo: [ { $param: 'bar' } ]
+            });
+            expect(config.bind({ bar: 1 }).foo[0]).to.equal(1);
+        });
+    });
 });

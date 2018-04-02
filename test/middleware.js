@@ -11,7 +11,7 @@ describe('middleware', () => {
 
         middleware(config)(req, null, next);
 
-        expect(req.config.get('bar')).to.equal(1);
+        expect(req.config.bar).to.equal(1);
         expect(next).to.have.been.called;
     });
 
@@ -22,7 +22,7 @@ describe('middleware', () => {
 
         middleware(config)(req, null, next);
 
-        expect(req.config.get('bar')).to.equal(1);
+        expect(req.config.bar).to.equal(1);
         expect(next).to.have.been.called;
     });
 });

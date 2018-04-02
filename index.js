@@ -1,5 +1,40 @@
 'use strict';
 
+const plugins = {
+    $param(value, params, config) {
+        if (typeof value === 'string') {
+            return get(params, value);
+        }
+        const result = get(params, value[0]);
+        return result === undefined ? config._resolve(value[1], params) : result;
+    },
+
+    $template(value, params) {
+        return value.replace(/\$\{([^}]+)\}/g, (_, path) => get(params, path));
+    },
+
+    $guard(value, params, config) {
+        const item = find(value, (item) => item[0] === '$default' || get(params, item[0]));
+        return item && config._resolve(item[1], params);
+    },
+
+    $switch(value, params, config) {
+        const test = get(params, value[0]);
+        const item = find(value[1], (item) => item[0] === test || item[0] === '$default');
+        return item && config._resolve(item[1], params);
+    },
+
+    $function(value, params, config) {
+        if (typeof value === 'string') {
+            return get(config._functions, value)(params);
+        }
+        const mergedParams = Object.assign({}, value[1], params);
+        return get(config._functions, value[0])(mergedParams);
+    }
+};
+
+const keywords = Object.keys(plugins);
+
 class Config {
     /**
      * @param {object} data - Config data.
@@ -57,32 +92,12 @@ class Config {
                     return value.map((value) => this._resolve(value, params, true));
                 }
             } else {
-                if (value.$param) {
-                    if (typeof value.$param === 'string') {
-                        return get(params, value.$param);
-                    }
-                    const result = get(params, value.$param[0]);
-                    return result === undefined ? this._resolve(value.$param[1], params) : result;
+                const keyword = find(keywords, (keyword) => value[keyword]);
+
+                if (keyword) {
+                    return plugins[keyword](value[keyword], params, this);
                 }
-                if (value.$template) {
-                    return value.$template.replace(/\$\{([^}]+)\}/g, (_, path) => get(params, path));
-                }
-                if (value.$guard) {
-                    const item = find(value.$guard, (item) => item[0] === '$default' || get(params, item[0]));
-                    return item && this._resolve(item[1], params);
-                }
-                if (value.$switch) {
-                    const test = get(params, value.$switch[0]);
-                    const item = find(value.$switch[1], (item) => item[0] === test || item[0] === '$default');
-                    return item && this._resolve(item[1], params);
-                }
-                if (value.$function) {
-                    if (typeof value.$function === 'string') {
-                        return get(this._functions, value.$function)(params);
-                    }
-                    const mergedParams = Object.assign({}, value.$function[1], params);
-                    return get(this._functions, value.$function[0])(mergedParams);
-                }
+
                 if (deep) {
                     return Object.keys(value).reduce((result, key) => {
                         result[key] = this._resolve(value[key], params, true);
@@ -93,6 +108,65 @@ class Config {
         }
 
         return value;
+    }
+
+    /**
+     * Binds config to params.
+     *
+     * @param {object} params - Dynamic params.
+     * @returns {object} Bound config.
+     */
+    bind(params) {
+        return this._bind(this._data, params);
+    }
+
+    /**
+     * Binds config value to params.
+     *
+     * @param {*} value - Config value.
+     * @param {object} params - Dynamic params.
+     * @returns {*} Bound value.
+     */
+    _bind(value, params) {
+        if (typeof value === 'object' && value !== null) {
+            if (Array.isArray(value)) {
+                return value.reduce(this._assign.bind(this, params), []);
+            }
+
+            const keyword = find(keywords, (keyword) => value[keyword]);
+
+            if (keyword) {
+                return plugins[keyword].bind(null, value[keyword], params, this);
+            }
+
+            return Object.keys(value).reduce((result, key) => {
+                return this._assign(params, result, value[key], key);
+            }, {});
+        }
+
+        return value;
+    }
+
+    /**
+     * Binds array/object item.
+     *
+     * @param {object} params - Dynamic params.
+     * @param {array|object} result - Target array/object.
+     * @param {*} item - Array/object item.
+     * @param {number|string} key - Index/key.
+     * @returns {*} Target array/object.
+     */
+    _assign(params, result, item, key) {
+        const bound = this._bind(item, params);
+        if (typeof bound === 'function') {
+            return Object.defineProperty(result, key, {
+                configurable: true,
+                enumerable: true,
+                get: bound
+            });
+        }
+        result[key] = bound;
+        return result;
     }
 }
 

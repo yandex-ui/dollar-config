@@ -19,6 +19,7 @@ Dollar config lets you keep dynamic settings in a declarative way and query them
          * [$function](#function)
          * [Nested settings/params/functions](#nested-settingsparamsfunctions)
          * [Nested $-keywords](#nested--keywords)
+      * [Binding](#binding)
       * [Express middleware](#express-middleware)
       * [Validation](#validation)
       * [Building](#building)
@@ -233,8 +234,34 @@ config.get('foo', { bar: 'baz', qux: true, xyz: 1 });
 > 1
 ```
 
+## Binding
+The `.bind()` method clones your config, converting all dynamic keys to getters, so that you can use them as a normal object:
+```js
+const config = new DollarConfig({
+    foo: 1,
+    bar: { $param: 'baz' }
+});
+
+config.bind({ baz: 2 });
+> { foo: 1, bar: 2 }
+```
+
+Because all dynamic keys are evaluated lazily, you can even make self-references:
+```js
+const config = new DollarConfig({
+    foo: { $param: 'baz' },
+    bar: { $param: 'config.foo' }
+});
+
+const params = { baz: 1 };
+params.config = config.bind(params);
+
+params.config
+> { foo: 1, bar: 1 }
+```
+
 ## Express middleware
-Dollar config [express](http://expressjs.com/) middleware creates `req.config` which always passes `req` as `runtimParams` to `config.get`, so you don't have to do it manually:
+Dollar config [express](http://expressjs.com/) middleware [binds](#binding) provided config to the express `req` and puts the result into `req.config`:
 ```js
 {
   "foo": {
@@ -247,8 +274,9 @@ const dollarConfigMiddleware = require('dollar-config/middleware');
 
 app.use(dollarConfigMiddleware(require('config.json'));
 
+// /?bar=1
 app.use((req, res, next) => {
-    req.config.get('foo');
+    req.config.foo === 1 // true
 });
 ```
 
