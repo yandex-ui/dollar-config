@@ -272,6 +272,40 @@ describe('DollarConfig', () => {
             });
         });
 
+        describe('for properties with $function', () => {
+            it('calls referenced function', () => {
+                const config = new Config(
+                    {
+                        foo: {
+                            $function: 'bar'
+                        }
+                    },
+                    {
+                        functions: {
+                            bar: (params) => params.baz
+                        }
+                    }
+                );
+                expect(config.get('foo', { baz: 1 })).to.equal(1);
+            });
+
+            it('merges predefined params', () => {
+                const config = new Config(
+                    {
+                        foo: {
+                            $function: [ 'bar', { baz: 1, qux: 2 } ]
+                        }
+                    },
+                    {
+                        functions: {
+                            bar: (params) => params.baz + params.qux
+                        }
+                    }
+                );
+                expect(config.get('foo', { baz: 4 })).to.equal(6);
+            });
+        });
+
         describe('when returning object-like value', () => {
             it('recursively resolves objects', () => {
                 const config = new Config({

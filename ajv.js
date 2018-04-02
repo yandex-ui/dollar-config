@@ -49,6 +49,9 @@ function createSchema(schema, $ref) {
                 { type: 'string' },
                 { type: 'array', items: anyAndRef }
             ]
+        },
+        $function: {
+            type: 'string'
         }
     };
     const requiredKeys = Object.keys(properties).map((key) => {

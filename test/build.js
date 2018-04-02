@@ -188,4 +188,11 @@ describe('build', () => {
             expect(result).to.equal(2);
         });
     });
+
+    describe('for $function', () => {
+        it('adds predefined params', () => {
+            const result = build({ $function: 'foo' }, { baz: 1 });
+            expect(result).to.eql({ $function: [ 'foo', { baz: 1 } ] });
+        });
+    });
 });

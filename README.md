@@ -9,14 +9,15 @@ Dollar config lets you keep dynamic settings in a declarative way and query them
       * [Installation](#installation)
       * [Setup](#setup)
       * [Usage](#usage)
-      * [Examples](#examples)
+      * [Features](#features)
          * [Static setting](#static-setting)
-         * [Default setting](#default-setting)
-         * [Reference to a param](#reference-to-a-param)
-         * [Template setting](#template-setting)
-         * [Guarded setting](#guarded-setting)
-         * [Switched setting](#switched-setting)
-         * [Nested settings/params](#nested-settingsparams)
+         * [$default](#default)
+         * [$param](#param)
+         * [$template](#template)
+         * [$guard](#guard)
+         * [$switch](#switch)
+         * [$function](#function)
+         * [Nested settings/params/functions](#nested-settingsparamsfunctions)
          * [Nested $-keywords](#nested--keywords)
       * [Express middleware](#express-middleware)
       * [Validation](#validation)
@@ -57,7 +58,7 @@ config.get('foo');
 > 1
 ```
 
-### Default setting
+### $default
 Provides a fallback for an absent setting.
 ```js
 {
@@ -70,7 +71,7 @@ config.get('bar');
 > 0
 ```
 
-### Reference to a param
+### $param
 Looks up a param and returns its value.
 ```js
 {
@@ -97,7 +98,7 @@ config.get('foo', { baz: 1 });
 > 0
 ```
 
-### Template setting
+### $template
 Replaces `${paramName}` with param value.
 ```js
 {
@@ -111,7 +112,7 @@ config.get('greeting', { name: 'John' });
 > Hello, John!
 ```
 
-### Guarded setting
+### $guard
 Picks the first truthy param and returns correspondent setting.
 
 Falls back to an optional `$default` if none of the params is truthy.
@@ -137,7 +138,7 @@ config.get('foo', {})
 > oops
 ```
 
-### Switched setting
+### $switch
 Matches param value to a list of cases and picks correspondent setting.
 
 Falls back to an optional `$default` if no match is found.
@@ -166,8 +167,32 @@ config.get('meal', { dayOfTime: 'night' });
 > fridge
 ```
 
-### Nested settings/params
-Deep properties are accessible with dot-notation (both in settings and params):
+### $function
+Calls the referenced function and returns it's value.
+
+Functions are provided as an option to config constructor.
+
+Each function recevies `params` as a single argument.
+```js
+{
+  "expectedSalary": {
+    "$function": "double"
+  }
+}
+```
+```js
+const config = new DollarConfig(require('config.json'), {
+    functions: {
+        double: (params) => params.currentSalary * 2
+    }
+});
+
+config.get('expectedSalary', { currentSalary: 500 });
+> 1000
+```
+
+### Nested settings/params/functions
+Deep properties are accessible with dot-notation:
 ```js
 {
   "foo": {

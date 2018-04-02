@@ -3,9 +3,12 @@
 class Config {
     /**
      * @param {object} data - Config data.
+     * @param {object} [options] - Options.
+     * @param {object} [options.functions] - Functions.
      */
-    constructor(data) {
+    constructor(data, options) {
         this._data = data;
+        this._functions = get(options, 'functions');
     }
 
     /**
@@ -72,6 +75,13 @@ class Config {
                     const test = get(params, value.$switch[0]);
                     const item = find(value.$switch[1], (item) => item[0] === test || item[0] === '$default');
                     return item && this._resolve(item[1], params);
+                }
+                if (value.$function) {
+                    if (typeof value.$function === 'string') {
+                        return get(this._functions, value.$function)(params);
+                    }
+                    const mergedParams = Object.assign({}, value.$function[1], params);
+                    return get(this._functions, value.$function[0])(mergedParams);
                 }
                 if (deep) {
                     return Object.keys(value).reduce((result, key) => {

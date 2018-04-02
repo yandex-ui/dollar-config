@@ -90,6 +90,16 @@ describe('ajvDynamic', () => {
         });
     });
 
+    describe('for $function', () => {
+        it('passes string function names', () => {
+            expect(validate({ $function: 'foo' })).to.be.true;
+        });
+
+        it('fails non-string function names', () => {
+            expect(validate({ $function: 1 })).to.be.false;
+        });
+    });
+
     it('caches created schemas', () => {
         const validate = ajv.compile({
             type: 'object',

@@ -30,6 +30,7 @@ function resolve(value, params) {
             const $template = value.$template;
             const $guard = value.$guard;
             const $switch = value.$switch;
+            const $function = value.$function;
 
             if ($param) {
                 if (typeof $param === 'string') {
@@ -88,6 +89,10 @@ function resolve(value, params) {
                         $switch[1].map((item) => [ item[0], resolve(item[1], params) ])
                     ]
                 };
+            }
+
+            if ($function) {
+                return { $function: [ $function, params ] };
             }
 
             return Object.keys(value).reduce((result, key) => {
