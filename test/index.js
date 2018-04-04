@@ -344,6 +344,13 @@ describe('DollarConfig', () => {
             expect(config.bind({ bar: 1 }).foo).to.equal(1);
         });
 
+        it('proxies nested object properties', () => {
+            const config = new Config({
+                foo: { bar: 1 }
+            });
+            expect(config.bind({}).foo.bar).to.equal(1);
+        });
+
         it('proxies static array items', () => {
             const config = new Config({
                 foo: [ 1 ]
@@ -356,6 +363,30 @@ describe('DollarConfig', () => {
                 foo: [ { $param: 'bar' } ]
             });
             expect(config.bind({ bar: 1 }).foo[0]).to.equal(1);
+        });
+
+        it('memoizes computed values', () => {
+            const func = sinon.stub();
+            const config = new Config(
+                {
+                    foo: { $function: 'bar' }
+                },
+                {
+                    functions: { bar: func }
+                }
+            );
+            const boundConfig = config.bind({});
+            boundConfig.foo || boundConfig.foo;
+            expect(func).to.have.been.calledOnce;
+        });
+
+        it('leaves values writable', () => {
+            const config = new Config({
+                foo: { $param: 'bar' }
+            });
+            const boundConfig = config.bind({});
+            boundConfig.foo = 1;
+            expect(boundConfig.foo).to.equal(1);
         });
     });
 });

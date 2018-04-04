@@ -117,34 +117,9 @@ class Config {
      * @returns {object} Bound config.
      */
     bind(params) {
-        return this._bind(this._data, params);
-    }
-
-    /**
-     * Binds config value to params.
-     *
-     * @param {*} value - Config value.
-     * @param {object} params - Dynamic params.
-     * @returns {*} Bound value.
-     */
-    _bind(value, params) {
-        if (typeof value === 'object' && value !== null) {
-            if (Array.isArray(value)) {
-                return value.reduce(this._assign.bind(this, params), []);
-            }
-
-            const keyword = find(keywords, (keyword) => value[keyword]);
-
-            if (keyword) {
-                return plugins[keyword].bind(null, value[keyword], params, this);
-            }
-
-            return Object.keys(value).reduce((result, key) => {
-                return this._assign(params, result, value[key], key);
-            }, {});
-        }
-
-        return value;
+        return Object.keys(this._data).reduce((result, key) => {
+            return this._assign(params, result, this._data[key], key);
+        }, {});
     }
 
     /**
@@ -152,20 +127,34 @@ class Config {
      *
      * @param {object} params - Dynamic params.
      * @param {array|object} result - Target array/object.
-     * @param {*} item - Array/object item.
+     * @param {*} value - Array/object item value.
      * @param {number|string} key - Index/key.
      * @returns {*} Target array/object.
      */
-    _assign(params, result, item, key) {
-        const bound = this._bind(item, params);
-        if (typeof bound === 'function') {
-            return Object.defineProperty(result, key, {
-                configurable: true,
-                enumerable: true,
-                get: bound
-            });
+    _assign(params, result, value, key) {
+        if (typeof value === 'object' && value !== null) {
+            if (Array.isArray(value)) {
+                value = value.reduce(this._assign.bind(this, params), []);
+            } else {
+                const keyword = find(keywords, (keyword) => value[keyword]);
+
+                if (keyword) {
+                    // convert dynamic key into getter
+                    return Object.defineProperty(result, key, {
+                        configurable: true,
+                        enumerable: true,
+                        get: () => setValue(result, key, plugins[keyword](value[keyword], params, this)),
+                        set: (value) => setValue(result, key, value)
+                    });
+                }
+
+                value = Object.keys(value).reduce((result, key) => {
+                    return this._assign(params, result, value[key], key);
+                }, {});
+            }
         }
-        result[key] = bound;
+
+        result[key] = value;
         return result;
     }
 }
@@ -193,6 +182,16 @@ function get(object, path) {
     }
 
     return object;
+}
+
+function setValue(object, key, value) {
+    Object.defineProperty(object, key, {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        value
+    });
+    return value;
 }
 
 module.exports = Config;

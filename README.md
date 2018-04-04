@@ -260,6 +260,23 @@ params.config
 > { foo: 1, bar: 1 }
 ```
 
+After the first invocation getters replace themselves with evaluated values (a.k.a memoization):
+```js
+let i = 1;
+const config = new DollarConfig(
+    { foo: { $function: 'bar' } },
+    { functions: { bar: () => i++ } }
+);
+const boundConfig = config.bind({});
+
+boundConfig.foo
+> 1
+
+boundConfig.foo
+> 1
+```
+
+
 ## Express middleware
 Dollar config [express](http://expressjs.com/) middleware [binds](#binding) provided config to the express `req` and puts the result into `req.config`:
 ```js
