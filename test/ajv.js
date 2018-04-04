@@ -47,13 +47,22 @@ describe('ajvDynamic', () => {
     });
 
     describe('for $template', () => {
-        it('passes if original schema is string', () => {
+        it('passes string value if original schema is string', () => {
             const validate = ajv.compile({ dynamic: { type: 'string' } });
             expect(validate({ $template: '${foo}' })).to.be.true;
         });
 
-        it('fails if original schema is not string', () => {
+        it('passes array value if original schema is string', () => {
+            const validate = ajv.compile({ dynamic: { type: 'string' } });
+            expect(validate({ $template: [ '${foo}', '${bar}' ] })).to.be.true;
+        });
+
+        it('fails string value if original schema is not string', () => {
             expect(validate({ $template: '${foo}' })).to.be.false;
+        });
+
+        it('fails array value if original schema is not string', () => {
+            expect(validate({ $template: [ '${foo}', '${bar}' ] })).to.be.false;
         });
     });
 

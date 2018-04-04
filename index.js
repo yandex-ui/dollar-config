@@ -10,6 +10,9 @@ const plugins = {
     },
 
     $template(value, params) {
+        if (!(typeof value === 'string')) {
+            value = value.join('');
+        }
         return value.replace(/\$\{([^}]+)\}/g, (_, path) => get(params, path));
     },
 

@@ -29,6 +29,9 @@ function createSchema(schema, $ref) {
         type: 'array',
         items: [ {}, { $ref } ]
     };
+    const template = {
+        allOf: stringAndRef.items
+    };
     const properties = {
         $param: {
             oneOf: [
@@ -37,7 +40,10 @@ function createSchema(schema, $ref) {
             ]
         },
         $template: {
-            allOf: stringAndRef.items
+            oneOf: [
+                template,
+                { type: 'array', items: template }
+            ]
         },
         $guard: {
             type: 'array',

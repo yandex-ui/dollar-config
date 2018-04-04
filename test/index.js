@@ -150,6 +150,15 @@ describe('DollarConfig', () => {
                 });
                 expect(config.get('foo', { bar: 'baz', qux: 'xyz' })).to.equal('baz/xyz');
             });
+
+            it('joins array before computing', () => {
+                const config = new Config({
+                    foo: {
+                        $template: [ '${bar}', '/', '${qux}' ]
+                    }
+                });
+                expect(config.get('foo', { bar: 'baz', qux: 'xyz' })).to.equal('baz/xyz');
+            });
         });
 
         describe('for properties with $guard', () => {
