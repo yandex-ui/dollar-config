@@ -51,8 +51,13 @@ describe('build', () => {
     });
 
     describe('for $template', () => {
-        it('inlines matcing templates', () => {
+        it('inlines matching string templates', () => {
             const result = build({ $template: '${foo}/${bar}' }, { foo: 1, bar: 2 });
+            expect(result).to.equal('1/2');
+        });
+
+        it('inlines matching array templates', () => {
+            const result = build({ $template: [ '${foo}', '/', '${bar}' ] }, { foo: 1, bar: 2 });
             expect(result).to.equal('1/2');
         });
 

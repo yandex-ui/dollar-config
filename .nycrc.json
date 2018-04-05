@@ -9,7 +9,8 @@
     "lines": 100,
     "all": true,
     "include": [
-        "*.js"
+        "*.js",
+        "lib"
     ],
     "exclude": [
         "node_modules/**"
