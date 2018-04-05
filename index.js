@@ -143,11 +143,12 @@ class Config {
 
                 if (keyword) {
                     // convert dynamic key into getter
-                    return Object.defineProperty(result, key, {
-                        configurable: true,
-                        enumerable: true,
-                        get: () => setValue(result, key, plugins[keyword](value[keyword], params, this)),
-                        set: (value) => setValue(result, key, value)
+                    return setGetter(result, key, () => {
+                        setGetter(result, key, () => {
+                            throw new Error(`Circular reference found in '${key}'`);
+                        });
+                        const resolved = plugins[keyword](value[keyword], params, this);
+                        return setValue(result, key, resolved);
                     });
                 }
 
@@ -185,6 +186,15 @@ function get(object, path) {
     }
 
     return object;
+}
+
+function setGetter(object, key, getter) {
+    return Object.defineProperty(object, key, {
+        configurable: true,
+        enumerable: true,
+        get: getter,
+        set: (value) => setValue(object, key, value)
+    });
 }
 
 function setValue(object, key, value) {

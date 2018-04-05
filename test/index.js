@@ -397,5 +397,14 @@ describe('DollarConfig', () => {
             boundConfig.foo = 1;
             expect(boundConfig.foo).to.equal(1);
         });
+
+        it('detects circular references', () => {
+            const config = new Config({
+                foo: { $param: 'config.foo' }
+            });
+            const params = {};
+            params.config = config.bind(params);
+            expect(() => params.config.foo).to.throw('Circular reference found in \'foo\'');
+        });
     });
 });
