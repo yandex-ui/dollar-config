@@ -23,10 +23,14 @@ function macro(schema, parentSchema, context) {
 function createSchema(schema, $ref) {
     const stringAndRef = {
         type: 'array',
+        minItems: 2,
+        maxItems: 2,
         items: [ { type: 'string' }, { $ref } ]
     };
     const anyAndRef = {
         type: 'array',
+        minItems: 2,
+        maxItems: 2,
         items: [ {}, { $ref } ]
     };
     const template = {
@@ -51,6 +55,8 @@ function createSchema(schema, $ref) {
         },
         $switch: {
             type: 'array',
+            minItems: 2,
+            maxItems: 2,
             items: [
                 { type: 'string' },
                 { type: 'array', items: anyAndRef }

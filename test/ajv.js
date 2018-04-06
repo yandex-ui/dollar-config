@@ -44,6 +44,14 @@ describe('ajvDynamic', () => {
         it('fails default value not matching original schema', () => {
             expect(validate({ $param: [ 'foo', '1' ] })).to.be.false;
         });
+
+        it('fails insufficient array items', () => {
+            expect(validate({ $param: [ 'foo' ] })).to.be.false;
+        });
+
+        it('fails redundant array items', () => {
+            expect(validate({ $param: [ 'foo', 1, 'bar' ] })).to.be.false;
+        });
     });
 
     describe('for $template', () => {
@@ -70,12 +78,23 @@ describe('ajvDynamic', () => {
         it('passes static values', () => {
             expect(validate({ $guard: [ [ 'foo', 1 ] ] })).to.be.true;
         });
+
         it('passes dynamic values', () => {
             expect(validate({ $guard: [ [ 'foo', { $param: 'bar' } ] ] })).to.be.true;
         });
+
+        it('fails insufficient array items', () => {
+            expect(validate({ $guard: [ [ 'foo' ] ] })).to.be.false;
+        });
+
+        it('fails redundant array items', () => {
+            expect(validate({ $guard: [ [ 'foo', 1, 'bar' ] ] })).to.be.false;
+        });
+
         it('fails non-string param names', () => {
             expect(validate({ $guard: [ [ 0, 1 ] ] })).to.be.false;
         });
+
         it('fails values not matching original schema', () => {
             expect(validate({ $guard: [ [ 'foo', '1' ] ] })).to.be.false;
         });
@@ -85,15 +104,29 @@ describe('ajvDynamic', () => {
         it('passes static values', () => {
             expect(validate({ $switch: [ 'foo', [ [ 'bar', 1 ] ] ] })).to.be.true;
         });
+
         it('passes dynamic values', () => {
             expect(validate({ $switch: [ 'foo', [ [ 'bar', { $param: 'baz' } ] ] ] })).to.be.true;
         });
+
         it('passes non-string param values', () => {
             expect(validate({ $switch: [ 'foo', [ [ 0, 1 ] ] ] })).to.be.true;
         });
+
+        it('fails insufficient array items', () => {
+            expect(validate({ $switch: [ 'foo' ] })).to.be.false;
+            expect(validate({ $switch: [ 'foo', [ [ 'bar' ] ] ] })).to.be.false;
+        });
+
+        it('fails redundant array items', () => {
+            expect(validate({ $switch: [ 'foo', [ [ 'bar', 1 ] ], 'baz' ] })).to.be.false;
+            expect(validate({ $switch: [ 'foo', [ [ 'bar', 1, 'baz' ] ] ] })).to.be.false;
+        });
+
         it('fails non-string param names', () => {
             expect(validate({ $switch: [ 0, [ [ 'bar', 1 ] ] ] })).to.be.false;
         });
+
         it('fails values not matching original schema', () => {
             expect(validate({ $switch: [ 'foo', [ [ 'bar', '1' ] ] ] })).to.be.false;
         });
