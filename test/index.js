@@ -248,6 +248,22 @@ describe('DollarConfig', () => {
                 });
             });
 
+            describe('when finds a matching param value in a list', () => {
+                it('returns correspondent value', () => {
+                    const config = new Config({
+                        foo: {
+                            $switch: [
+                                'abc',
+                                [
+                                    [ [ 'def', 'ghi' ], 'bar' ]
+                                ]
+                            ]
+                        }
+                    });
+                    expect(config.get('foo', { abc: 'ghi' })).to.equal('bar');
+                });
+            });
+
             describe('otherwise', () => {
                 it('returns default value', () => {
                     const config = new Config({

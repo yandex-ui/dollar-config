@@ -54,7 +54,16 @@ const plugins = {
     $switch(value, params) {
         if (value[0] in params) {
             const test = params[value[0]];
-            const item = value[1].find((item) => item[0] === test || item[0] === '$default');
+            const item = value[1].find((item) => {
+                const _case = item[0];
+                if (_case === test) {
+                    return true;
+                }
+                if (Array.isArray(_case) && _case.indexOf(test) !== -1) {
+                    return true;
+                }
+                return _case === '$default';
+            });
             return item && resolve(item[1], params);
         }
         return {

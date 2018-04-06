@@ -23,7 +23,16 @@ const plugins = {
 
     $switch(value, params, config) {
         const test = get(params, value[0]);
-        const item = find(value[1], (item) => item[0] === test || item[0] === '$default');
+        const item = find(value[1], (item) => {
+            const _case = item[0];
+            if (_case === test) {
+                return true;
+            }
+            if (Array.isArray(_case) && _case.indexOf(test) !== -1) {
+                return true;
+            }
+            return _case === '$default';
+        });
         return item && config._resolve(item[1], params);
     },
 

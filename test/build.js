@@ -167,12 +167,28 @@ describe('build', () => {
                     $switch: [
                         'foo',
                         [
-                            [ 'bar', { $param: 'baz' } ],
-                            [ '$default', { $param: 'qux' } ]
+                            [ 'bar', 1 ],
+                            [ '$default', 2 ]
                         ]
                     ]
                 },
-                { foo: 'bar', baz: 1, qux: 2 }
+                { foo: 'bar' }
+            );
+            expect(result).to.equal(1);
+        });
+
+        it('inlines a test matching item in a list', () => {
+            const result = build(
+                {
+                    $switch: [
+                        'foo',
+                        [
+                            [ [ 'bar', 'baz' ], 1 ],
+                            [ '$default', 2 ]
+                        ]
+                    ]
+                },
+                { foo: 'baz' }
             );
             expect(result).to.equal(1);
         });
@@ -183,12 +199,12 @@ describe('build', () => {
                     $switch: [
                         'foo',
                         [
-                            [ 'bar', { $param: 'baz' } ],
-                            [ '$default', { $param: 'qux' } ]
+                            [ 'bar', 1 ],
+                            [ '$default', 2 ]
                         ]
                     ]
                 },
-                { foo: 'oops', baz: 1, qux: 2 }
+                { foo: 'oops' }
             );
             expect(result).to.equal(2);
         });
