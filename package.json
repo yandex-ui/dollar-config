@@ -27,6 +27,7 @@
     "babel-cli": "6.26.0",
     "babel-preset-es2015": "6.24.1",
     "chai": "4.1.2",
+    "coveralls": "3.0.0",
     "eslint": "4.4.0",
     "eslint-config-yandex-personal": "0.0.1",
     "eslint-plugin-jsdoc": "3.3.1",
@@ -38,11 +39,10 @@
     "sinon-chai": "3.0.0"
   },
   "scripts": {
-    "coverage": "nyc mocha -R dot",
     "lint": "eslint --ignore-path .gitignore .",
     "precommit": "yarn lint",
     "prepublish": "babel --presets=es2015 index.js -d dist",
     "prepush": "nyc --check-coverage mocha -R dot",
-    "test": "mocha"
+    "test": "nyc mocha -R dot"
   }
 }
