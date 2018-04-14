@@ -3,6 +3,8 @@
 Dollar config lets you keep dynamic settings in a declarative way and query them with runtime params.
 
 [![Build Status](https://travis-ci.org/razetdinov/dollar-config.svg?branch=master)](https://travis-ci.org/razetdinov/dollar-config)
+[![npm version](https://badge.fury.io/js/dollar-config.svg)](https://badge.fury.io/js/dollar-config)
+[![Coverage Status](https://coveralls.io/repos/github/razetdinov/dollar-config/badge.svg?branch=master)](https://coveralls.io/github/razetdinov/dollar-config?branch=master)
 
 <!--ts-->
    * [Dollar config](#dollar-config)
