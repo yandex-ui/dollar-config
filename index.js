@@ -13,7 +13,7 @@ const plugins = {
         if (!(typeof value === 'string')) {
             value = value.join('');
         }
-        return value.replace(/\$\{([^}]+)\}/g, (_, path) => get(params, path));
+        return value.replace(/\$\{([^}]+)\}/g, (_, path) => get(params, path.trim()));
     },
 
     $guard(value, params, config) {
