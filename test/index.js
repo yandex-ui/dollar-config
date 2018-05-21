@@ -151,7 +151,7 @@ describe('DollarConfig', () => {
                 expect(config.get('foo', { bar: 'baz', qux: 'xyz' })).to.equal('baz/xyz');
             });
 
-            it('allow leading and trailing spaces in references', () => {
+            it('allows leading and trailing spaces in references', () => {
                 const config = new Config({
                     foo: {
                         $template: '${    bar}/${ qux }/${bar    }'
