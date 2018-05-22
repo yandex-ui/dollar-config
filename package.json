@@ -1,7 +1,7 @@
 {
   "name": "dollar-config",
   "description": "Static config with dynamic settings",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "license": "MIT",
   "author": {
     "name": "Azat Razetdinov",
