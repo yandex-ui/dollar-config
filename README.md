@@ -154,7 +154,7 @@ N.B. `$default`, if present, must be the last item for lookup performance.
       "dayOfTime",
       [
         [ "morning", "breakfast" ],
-        [ "midday", "launch" ],
+        [ "midday", "lunch" ],
         [ "evening", "dinner" ],
         [ "$default", "fridge" ]
       ]
@@ -164,7 +164,7 @@ N.B. `$default`, if present, must be the last item for lookup performance.
 ```
 ```js
 config.get('meal', { dayOfTime: 'midday' });
-> launch
+> lunch
 
 config.get('meal', { dayOfTime: 'night' });
 > fridge
