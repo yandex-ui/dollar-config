@@ -139,6 +139,15 @@ describe('DollarConfig', () => {
                 });
                 expect(config.get('foo', { baz: 'qux' })).to.equal('qux');
             });
+
+            it('returns nested resolved default value', () => {
+                const config = new Config({
+                    foo: {
+                        $param: [ 'bar', { wow: { $param: 'baz' } } ]
+                    }
+                });
+                expect(config.get('foo', { baz: 'qux' })).to.eql({ wow: 'qux' });
+            });
         });
 
         describe('for properties with $template', () => {
@@ -194,6 +203,18 @@ describe('DollarConfig', () => {
                         }
                     });
                     expect(config.get('foo', { def: 1, ghi: 'baz' })).to.equal('baz');
+                });
+
+                it('returns nested resolved correspondent value', () => {
+                    const config = new Config({
+                        foo: {
+                            $guard: [
+                                [ 'abc', 'bar' ],
+                                [ 'def', { wow: { $param: 'ghi' } } ]
+                            ]
+                        }
+                    });
+                    expect(config.get('foo', { def: 1, ghi: 'baz' })).to.eql({ wow: 'baz' });
                 });
             });
 
@@ -254,6 +275,21 @@ describe('DollarConfig', () => {
                         }
                     });
                     expect(config.get('foo', { abc: 'ghi', jkl: 'baz' })).to.equal('baz');
+                });
+
+                it('returns nested resolved correspondent value', () => {
+                    const config = new Config({
+                        foo: {
+                            $switch: [
+                                'abc',
+                                [
+                                    [ 'def', 'bar' ],
+                                    [ 'ghi', { wow: { $param: 'jkl' } } ]
+                                ]
+                            ]
+                        }
+                    });
+                    expect(config.get('foo', { abc: 'ghi', jkl: 'baz' })).to.eql({ wow: 'baz' });
                 });
             });
 

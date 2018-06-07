@@ -6,7 +6,7 @@ const plugins = {
             return get(params, value);
         }
         const result = get(params, value[0]);
-        return result === undefined ? config._resolve(value[1], params) : result;
+        return result === undefined ? config._resolve(value[1], params, true) : result;
     },
 
     $template(value, params) {
@@ -18,7 +18,7 @@ const plugins = {
 
     $guard(value, params, config) {
         const item = find(value, (item) => item[0] === '$default' || get(params, item[0]));
-        return item && config._resolve(item[1], params);
+        return item && config._resolve(item[1], params, true);
     },
 
     $switch(value, params, config) {
@@ -33,7 +33,7 @@ const plugins = {
             }
             return _case === '$default';
         });
-        return item && config._resolve(item[1], params);
+        return item && config._resolve(item[1], params, true);
     },
 
     $function(value, params, config) {
