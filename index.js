@@ -40,7 +40,7 @@ const plugins = {
         if (typeof value === 'string') {
             return get(config._functions, value)(params);
         }
-        const mergedParams = Object.assign({}, value[1], params);
+        const mergedParams = Object.assign({}, params, value[1]);
         return get(config._functions, value[0])(mergedParams);
     }
 };
