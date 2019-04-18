@@ -19,7 +19,7 @@
   ],
   "browser": "dist/index.js",
   "dependencies": {
-    "lodash": "4.17.5",
+    "lodash": "4.17.11",
     "uuid": "3.2.1"
   },
   "devDependencies": {
