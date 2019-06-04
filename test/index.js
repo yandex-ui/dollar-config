@@ -372,7 +372,7 @@ describe('DollarConfig', () => {
                         }
                     }
                 );
-                expect(config.get('foo', { baz: 4 })).to.equal(6);
+                expect(config.get('foo', { baz: 4 })).to.equal(3);
             });
         });
 
