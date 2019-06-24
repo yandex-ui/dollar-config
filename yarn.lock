@@ -1225,10 +1225,10 @@ eslint-config-loris@9.0.0:
   resolved "https://registry.yarnpkg.com/eslint-config-loris/-/eslint-config-loris-9.0.0.tgz#ba396c77d606fdf9de2164a7e8a7e9e3810a2d3e"
   integrity sha512-6kfc1y5n0ctRYRSlRgdi0AYs25wvjqelw/uVVDc9AHCzNRvehytr7dv4jutbLZKZgVdYTsyjNAmMmyyN2DlBqg==
 
-eslint-config-yandex-personal@0.0.1:
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/eslint-config-yandex-personal/-/eslint-config-yandex-personal-0.0.1.tgz#468971bd3dbd5b059652649ef648ae39d6e7e6e6"
-  integrity sha1-RolxvT29WwWWUmSe9kiuOdbn5uY=
+eslint-config-yandex-personal@0.0.4:
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/eslint-config-yandex-personal/-/eslint-config-yandex-personal-0.0.4.tgz#7cb797da725761266352ccaa829e064de7538051"
+  integrity sha512-jxqLdIuaQdERZvvcjbC6dWV0BVxWXpDYKo5XtWENvPQCCilCHbf80R+SdjG8t/0wyMCLSMKS4ijWUnjOUitaYQ==
   dependencies:
     eslint-config-loris "9.0.0"
 
