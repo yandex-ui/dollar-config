@@ -13,6 +13,7 @@
         "lib"
     ],
     "exclude": [
+        ".eslintrc.js",
         "node_modules/**"
     ]
 }
