@@ -27,7 +27,7 @@
     "babel-cli": "6.26.0",
     "babel-preset-es2015": "6.24.1",
     "chai": "4.2.0",
-    "coveralls": "3.0.0",
+    "coveralls": "3.0.4",
     "eslint": "4.4.0",
     "eslint-config-yandex-personal": "0.0.4",
     "eslint-plugin-jsdoc": "3.3.1",
