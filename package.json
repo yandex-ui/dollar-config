@@ -30,7 +30,7 @@
     "coveralls": "^3.0.4",
     "eslint": "^6.0.1",
     "eslint-config-yandex-personal": "^0.0.4",
-    "eslint-plugin-jsdoc": "^3.7.1",
+    "eslint-plugin-jsdoc": "^8.6.0",
     "husky": "^2.5.0",
     "mocha": "^6.1.4",
     "nyc": "^14.1.1",
