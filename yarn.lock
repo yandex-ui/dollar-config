@@ -1356,9 +1356,9 @@ eslint-config-yandex-personal@^0.0.4:
     eslint-config-loris "9.0.0"
 
 eslint-plugin-jsdoc@^8.6.2:
-  version "8.6.2"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-jsdoc/-/eslint-plugin-jsdoc-8.6.2.tgz#acf77cda9719aecfb753d796441b0c07be1e2e74"
-  integrity sha512-dqnkRVAHFZzfHR57dzXbcBndqH6Mtd1waKgAiI3W5a3kwdWPjquFlQ20Qz+A/rV/u5wDAXWRxJMfEfCQ2gQrqg==
+  version "8.7.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-jsdoc/-/eslint-plugin-jsdoc-8.7.0.tgz#ef61bb7966138576b23aacf249e958e9a0a012ff"
+  integrity sha512-4UzO2Yw+5s1DOfQCTaasUx8Ng/h6/nTtrO3gGiCD086pOAcDFkbVHKdGrGnGuXd90MPDE9bHD92xJ5ke3cMrRA==
   dependencies:
     comment-parser "^0.5.5"
     debug "^4.1.1"
