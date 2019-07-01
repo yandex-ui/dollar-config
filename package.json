@@ -39,9 +39,7 @@
   },
   "scripts": {
     "lint": "eslint --ignore-path .gitignore .",
-    "precommit": "yarn lint",
     "prepublish": "babel --presets=es2015 index.js -d dist",
-    "prepush": "nyc --check-coverage mocha -R dot",
     "pretest": "yarn lint",
     "test": "nyc mocha -R dot"
   }
