@@ -14,18 +14,14 @@
   },
   "files": [
     "*.js",
-    "dist",
     "lib"
   ],
-  "browser": "dist/index.js",
   "dependencies": {
     "lodash": "^4.17.11",
     "uuid": "^3.3.2"
   },
   "devDependencies": {
     "ajv": "^6.10.0",
-    "babel-cli": "^6.26.0",
-    "babel-preset-es2015": "^6.24.1",
     "chai": "^4.2.0",
     "coveralls": "^3.0.4",
     "eslint": "^6.0.1",
@@ -39,7 +35,6 @@
   },
   "scripts": {
     "lint": "eslint --ignore-path .gitignore .",
-    "prepublish": "babel --presets=es2015 index.js -d dist",
     "pretest": "yarn lint",
     "test": "nyc mocha -R dot"
   }
