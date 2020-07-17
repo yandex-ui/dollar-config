@@ -3,19 +3,11 @@
   "description": "Static config with dynamic settings",
   "version": "0.1.17",
   "license": "MIT",
-  "author": {
-    "name": "Azat Razetdinov",
-    "email": "razetdinov@gmail.com",
-    "url": "https://github.com/razetdinov"
+  "scripts": {
+    "lint": "eslint --ignore-path .gitignore .",
+    "pretest": "yarn lint",
+    "test": "nyc mocha -R dot"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/yandex-ui/dollar-config"
-  },
-  "files": [
-    "*.js",
-    "lib"
-  ],
   "dependencies": {
     "lodash": "^4.17.19",
     "uuid": "^8.2.0"
@@ -36,9 +28,18 @@
   "resolutions": {
     "eslint/inquirer": "~7.1.0"
   },
-  "scripts": {
-    "lint": "eslint --ignore-path .gitignore .",
-    "pretest": "yarn lint",
-    "test": "nyc mocha -R dot"
-  }
+  "files": [
+    "*.js",
+    "lib"
+  ],
+  "author": {
+    "name": "Azat Razetdinov",
+    "email": "razetdinov@gmail.com",
+    "url": "https://github.com/razetdinov"
+  },
+  "contributors": [
+      "Alexey Ten (https://github.com/alexeyten)",
+      "Ivan Vlasenko (https://github.com/avanes)"
+  ],
+  "repository": "github:yandex-ui/dollar-config"
 }
