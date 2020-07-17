@@ -1,6 +1,6 @@
 'use strict';
 
-const uuidv5 = require('uuid/v5');
+const { v5: uuidv5 } = require('uuid');
 const DEFAULT_SCHEMA_ID = 'http://json-schema.org/schema';
 
 function dynamic(ajv) {
