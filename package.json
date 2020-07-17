@@ -1,7 +1,7 @@
 {
   "name": "dollar-config",
   "description": "Static config with dynamic settings",
-  "version": "0.1.17",
+  "version": "0.1.18",
   "license": "MIT",
   "scripts": {
     "lint": "eslint --ignore-path .gitignore .",
@@ -38,8 +38,8 @@
     "url": "https://github.com/razetdinov"
   },
   "contributors": [
-      "Alexey Ten (https://github.com/alexeyten)",
-      "Ivan Vlasenko (https://github.com/avanes)"
+    "Alexey Ten (https://github.com/alexeyten)",
+    "Ivan Vlasenko (https://github.com/avanes)"
   ],
   "repository": "github:yandex-ui/dollar-config"
 }
