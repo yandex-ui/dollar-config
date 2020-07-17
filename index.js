@@ -74,6 +74,7 @@ class Config {
         let value = this._data;
         let index = 0;
 
+        // eslint-disable-next-line no-eq-null
         while (value != null) {
             const isLast = index === length;
             if (params) {
@@ -190,6 +191,7 @@ function get(object, path) {
     const length = path.length;
     let index = 0;
 
+    // eslint-disable-next-line no-eq-null
     while (object != null && index < length) {
         object = object[path[index++]];
     }
