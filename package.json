@@ -21,17 +21,20 @@
     "uuid": "^8.2.0"
   },
   "devDependencies": {
-    "ajv": "^6.10.0",
+    "ajv": "^6.12.3",
     "chai": "^4.2.0",
-    "coveralls": "^3.0.4",
-    "eslint": "^6.0.1",
+    "coveralls": "^3.1.0",
+    "eslint": "^6.8.0",
     "eslint-config-yandex-personal": "^0.0.4",
-    "eslint-plugin-jsdoc": "^22.1.0",
-    "husky": "^2.5.0",
-    "mocha": "^7.1.1",
-    "nyc": "^15.0.0",
-    "sinon": "^7.3.2",
-    "sinon-chai": "^3.3.0"
+    "eslint-plugin-jsdoc": "^27.1.2",
+    "husky": "^3.1.0",
+    "mocha": "^7.2.0",
+    "nyc": "^15.1.0",
+    "sinon": "^9.0.2",
+    "sinon-chai": "^3.5.0"
+  },
+  "resolutions": {
+    "eslint/inquirer": "~7.1.0"
   },
   "scripts": {
     "lint": "eslint --ignore-path .gitignore .",
